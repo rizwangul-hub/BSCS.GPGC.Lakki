@@ -2,7 +2,7 @@ import { HiCollection, HiClipboardList, HiCalendar, HiBell, HiDocumentText, HiAc
 import { FaGraduationCap, FaUserTie, FaLaptopCode } from 'react-icons/fa';
 import khalil from '../assets/khalil.jpeg';
 import kifayat from '../assets/kifayat.jpeg';
-import asad from '../assets/asad.jpeg';
+import Asad from '../assets/Asad.jpeg';
 import irfan from '../assets/irfan.jpeg';
 
 export const landingData = {
@@ -105,7 +105,7 @@ export const landingData = {
       role: "Professor",
       qualification: "MSc in Computer Science",
       specialization: "Cyber Security",
-      avatar: {asad}
+      avatar: {Asad}
     }
   ],
 
