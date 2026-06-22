@@ -1,0 +1,109 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700;800&display=swap');
+
+@import "tailwindcss";
+
+/* ── Design Tokens (Tailwind v4 @theme) ───────────────────────────────── */
+@theme {
+  --color-primary:        #2563EB;
+  --color-secondary:      #1E293B;
+  --color-accent:         #06B6D4;
+  --color-success:        #22C55E;
+  --color-warning:        #F59E0B;
+  --color-danger:         #EF4444;
+  --color-bg-light:       #F8FAFC;
+  --color-card-light:     #FFFFFF;
+  --color-text-primary:   #0F172A;
+  --color-text-secondary: #64748B;
+
+  --font-heading: "Poppins", sans-serif;
+  --font-body:    "Inter", sans-serif;
+}
+
+/* ── Base Styles ─────────────────────────────────────────────────────── */
+@layer base {
+  *, *::before, *::after {
+    box-sizing: border-box;
+  }
+
+  html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    font-family: var(--font-body);
+    background-color: #F8FAFC;
+    color: #0F172A;
+    overflow-x: hidden;
+    margin: 0;
+    padding: 0;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-heading);
+    color: #1E293B;
+  }
+
+  /* Inline fallback CSS variables so Tailwind custom tokens work even
+     if @theme processing is delayed on cold start */
+  :root {
+    --tw-color-primary:        #2563EB;
+    --tw-color-secondary:      #1E293B;
+    --tw-color-accent:         #06B6D4;
+    --tw-color-bg-light:       #F8FAFC;
+    --tw-color-text-secondary: #64748B;
+  }
+}
+
+/* Hide scrollbar utility class */
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-hide {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+
+/* ── Custom Interactive Animations ────────────────────────────────────── */
+
+/* 3D Rotating Logo */
+.rotating-logo {
+  animation: rotateXaxis 3s linear infinite;
+  transform-style: preserve-3d;
+  backface-visibility: visible;
+  display: inline-block;
+}
+
+@keyframes rotateXaxis {
+  from {
+    transform: rotateY(0deg);
+  }
+  to {
+    transform: rotateY(360deg);
+  }
+}
+
+/* Animated sliding underline navbar links */
+.nav-link-animated {
+  position: relative;
+  display: inline-block;
+  padding-bottom: 2px;
+}
+
+.nav-link-animated::after {
+  content: '';
+  position: absolute;
+  width: 100%;
+  transform: scaleX(0);
+  height: 2px;
+  bottom: -2px;
+  left: 0;
+  background-color: currentColor;
+  transform-origin: bottom right;
+  transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.nav-link-animated:hover::after {
+  transform: scaleX(1);
+  transform-origin: bottom left;
+}
