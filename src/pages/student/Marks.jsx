@@ -83,8 +83,8 @@ const StudentMarks = () => {
                     <th className="px-6 py-4 text-left font-semibold text-slate-600">#</th>
                     <th className="px-6 py-4 text-left font-semibold text-slate-600">Subject</th>
                     <th className="px-6 py-4 text-center font-semibold text-slate-600">Mid (30)</th>
-                    <th className="px-6 py-4 text-center font-semibold text-slate-600">Sessional (30)</th>
-                    <th className="px-6 py-4 text-center font-semibold text-slate-600">Total (60)</th>
+                    <th className="px-6 py-4 text-center font-semibold text-slate-600">Sessional (20)</th>
+                    <th className="px-6 py-4 text-center font-semibold text-slate-600">Total (50)</th>
                     <th className="px-6 py-4 text-center font-semibold text-slate-600">%</th>
                     <th className="px-6 py-4 text-center font-semibold text-slate-600">Grade</th>
                     <th className="px-6 py-4 text-left font-semibold text-slate-600">Performance</th>
@@ -154,7 +154,7 @@ const StudentMarks = () => {
                     </span>
                   </div>
                   <div className="grid grid-cols-3 gap-2 text-center">
-                    {[['Mid', mark.midMarks, '/30'], ['Sessional', mark.sessionalTotal, '/30'], ['Total', mark.grandTotal, '/60']].map(([label, val, max]) => (
+                    {[['Mid', mark.midMarks, '/30'], ['Sessional', mark.sessionalTotal, '/20'], ['Total', mark.grandTotal, '/50']].map(([label, val, max]) => (
                       <div key={label} className="bg-slate-50 rounded-xl p-2">
                         <span className="block text-[10px] text-text-secondary font-medium">{label}</span>
                         <span className="block font-heading font-bold text-secondary text-sm">{val ?? '—'}<span className="text-[9px] text-text-secondary">{max}</span></span>

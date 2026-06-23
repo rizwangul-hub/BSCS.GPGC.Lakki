@@ -168,7 +168,7 @@ const RegisterPage = () => {
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 backdrop-blur-md border border-white/10 text-xs font-medium text-accent">
             <span>Official Portal</span>
           </div>
-          <h1 className="font-heading font-extrabold text-4xl xl:text-5xl leading-tight tracking-tight">
+          <h1 className="font-heading font-extrabold text-4xl xl:text-5xl leading-tight tracking-tight text-white">
             Create Your <br/>
             <span className="bg-gradient-to-r from-white via-slate-100 to-accent bg-clip-text text-transparent">
               Student Account

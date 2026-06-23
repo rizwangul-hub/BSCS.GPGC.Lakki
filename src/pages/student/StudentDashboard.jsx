@@ -127,7 +127,7 @@ const StudentDashboard = () => {
           {/* Sessional / Mid Marks list */}
           <div className="lg:col-span-6 bg-white border border-slate-200/50 rounded-2xl p-6 shadow-sm flex flex-col gap-6">
             <h3 className="font-heading font-extrabold text-base text-secondary">
-              Course Transcript (Out of 60)
+              Course Transcript (Out of 50)
             </h3>
             
             <div className="divide-y divide-slate-100 flex flex-col">
@@ -144,7 +144,7 @@ const StudentDashboard = () => {
                     <div className="flex items-center gap-3 shrink-0">
                       <div className="text-right flex flex-col items-end">
                         <span className="font-heading font-extrabold text-base text-secondary">
-                          {mark.grandTotal} <span className="text-xs text-text-secondary">/60</span>
+                          {mark.grandTotal} <span className="text-xs text-text-secondary">/50</span>
                         </span>
                         <span className="text-[10px] text-text-secondary mt-0.5">{mark.percentage}%</span>
                       </div>
