@@ -48,27 +48,19 @@ const Assignments = () => {
   const [submissionsRoster, setSubmissionsRoster] = useState([]);
   const [gradingRowId, setGradingRowId] = useState(null);
 
-  // Student roster for selected subject in submissions
-  const [activeSubForStudents, setActiveSubForStudents] = useState(null);
-  const { data: studentsData, loading: subsLoading } = useCachedGet(
-    activeSubForStudents ? '/teacher/students' : null,
-    activeSubForStudents ? { subject: activeSubForStudents } : null
+  // Selected assignment ID for submissions roster
+  const [activeAssignmentId, setActiveAssignmentId] = useState(null);
+  const { data: submissionsData, loading: subsLoading, refetch: refetchSubmissions } = useCachedGet(
+    activeAssignmentId ? `/teacher/assignments/${activeAssignmentId}/submissions` : null
   );
 
   useEffect(() => {
-    if (studentsData) {
-      const mockSubs = studentsData.students.map((student, i) => ({
-        student,
-        submitted: i % 3 !== 2, // 2 out of 3 submitted
-        submittedAt: new Date(Date.now() - i * 12 * 60 * 60 * 1000).toLocaleString(),
-        marks: i % 3 === 0 ? 8 : '', // Some pre-graded
-        feedback: i % 3 === 0 ? 'Good effort.' : ''
-      }));
-      setSubmissionsRoster(mockSubs);
+    if (submissionsData) {
+      setSubmissionsRoster(submissionsData);
     } else {
       setSubmissionsRoster([]);
     }
-  }, [studentsData]);
+  }, [submissionsData]);
 
   // Update form subject when initialSubjectId loads
   useEffect(() => {
@@ -164,7 +156,7 @@ const Assignments = () => {
   const handleViewSubmissions = (assignmentObj) => {
     setSelectedAssignment(assignmentObj);
     setIsSubModalOpen(true);
-    setActiveSubForStudents(assignmentObj.subject?._id);
+    setActiveAssignmentId(assignmentObj._id);
   };
 
   // Grade student submission
@@ -180,11 +172,22 @@ const Assignments = () => {
     }
 
     setGradingRowId(studentId);
-    // Simulate API delay
-    await new Promise(r => setTimeout(r, 600));
-    toast.success(`Graded submission for ${sub.student.name}`);
-    setGradingRowId(null);
-    setSubmissionsRoster(prev => prev.map((s, idx) => idx === index ? { ...s, isGraded: true } : s));
+    try {
+      const res = await api.put(`/teacher/submissions/${sub.submissionId}/grade`, {
+        marks: Number(sub.marks),
+        feedback: sub.feedback
+      });
+      if (res.data.success) {
+        toast.success(`Graded submission for ${sub.student.name}`);
+        setSubmissionsRoster(prev => prev.map((s, idx) => idx === index ? { ...s, isGraded: true } : s));
+        invalidateCache(`/teacher/assignments/${activeAssignmentId}/submissions`);
+        refetchSubmissions();
+      }
+    } catch (err) {
+      toast.error(err.response?.data?.message || 'Failed to grade submission.');
+    } finally {
+      setGradingRowId(null);
+    }
   };
 
   const handleGradeChange = (index, field, value) => {
@@ -370,7 +373,7 @@ const Assignments = () => {
       </Modal>
 
       {/* Submissions Roster Modal */}
-      <Modal isOpen={isSubModalOpen} onClose={() => setIsSubModalOpen(false)} title={`Submissions: ${selectedAssignment?.title}`} size="large">
+      <Modal isOpen={isSubModalOpen} onClose={() => { setIsSubModalOpen(false); setActiveAssignmentId(null); }} title={`Submissions: ${selectedAssignment?.title}`} size="large">
         {subsLoading ? (
           <SkeletonLoader count={3} />
         ) : submissionsRoster.length === 0 ? (
@@ -415,13 +418,18 @@ const Assignments = () => {
                       {sub.submitted ? (
                         <div className="flex flex-col gap-0.5">
                           <span className="text-[11px] text-slate-400">{sub.submittedAt}</span>
-                          <a 
-                            href="#" 
-                            onClick={(e) => { e.preventDefault(); toast.success('Downloading mock student submission file...'); }}
-                            className="inline-flex items-center gap-1 text-[11px] text-primary font-bold hover:underline"
-                          >
-                            <HiDownload /> student_solution.pdf
-                          </a>
+                          {sub.fileUrl ? (
+                            <a 
+                              href={sub.fileUrl} 
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="inline-flex items-center gap-1 text-[11px] text-primary font-bold hover:underline"
+                            >
+                              <HiDownload /> View Submission
+                            </a>
+                          ) : (
+                            <span className="text-[11px] text-slate-400 italic">No File Uploaded</span>
+                          )}
                         </div>
                       ) : (
                         <span className="text-[11px] text-slate-400">-</span>
